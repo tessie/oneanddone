@@ -11,7 +11,9 @@
   <h1 id="user-profile-name">
     {{ _("<span>{name}</span>'s Profile")|fe(name=userprofile.name) }}
   </h1>
-
+  <h4 id ="user-profile-url">
+ {{ _('Personal URL:') }} <a href="{{userprofile.personal_url }}"><span>{{ userprofile.personal_url }}</span></a>
+ </h4>
   {% if userprofile.user == user %}
     {% include 'base/dashboard.html' %}
   {% endif %}

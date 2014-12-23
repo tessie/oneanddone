@@ -162,10 +162,3 @@ class UserDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
 
 
-class UserListAPI(generics.ListCreateAPIView):
-    """
-    API endpoint used to get a complete list of users
-    and create a new user.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer

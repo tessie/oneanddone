@@ -155,6 +155,16 @@ class Verify(django_browserid.views.Verify):
             logging in, let us know by emailing <a href="mailto:{email}">{email}</a>.
         """).format(email='oneanddone@mozilla.com'), extra_tags='safe')
         return super(Verify, self).login_failure(*args, **kwargs)
+    
+    def login_success(self, *args, **kwargs):
+        if (self.request.user.is_authenticated() and
+                not UserProfile.objects.filter(user=self.request.user).exists()):
+            return redirect('users.profile.create')
+        elif (self.request.user.is_authenticated() and
+                not UserProfile.objects.get(user=self.request.user).privacy_policy_accepted):
+            return redirect('users.profile.update')
+        else:
+            return super(Verify, self).login_success(*args, **kwargs)
 
 
 class UserDetailAPI(generics.RetrieveUpdateDestroyAPIView):

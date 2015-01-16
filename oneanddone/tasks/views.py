@@ -89,11 +89,15 @@ class CreateFeedbackView(LoginRequiredMixin, PrivacyPolicyRequiredMixin,
         task_name = feedback.attempt.task.name
         subject = 'Feedback on %s from One and Done' % task_name
         task_link = 'http'
+        feedback_link = 'http'
         if self.request.is_secure():
             task_link += 's'
+            feedback_link += 's'
         task_link += '://%s%s' % (
             self.request.get_host(),
             feedback.attempt.task.get_absolute_url())
+        feedback_link += '://%s/admin/tasks/feedback/%s' % (
+            self.request.get_host(), feedback.id)
         template = get_template('tasks/emails/feedback_email.txt')
 
         message = template.render({
@@ -101,7 +105,8 @@ class CreateFeedbackView(LoginRequiredMixin, PrivacyPolicyRequiredMixin,
             'task_name': task_name,
             'task_link': task_link,
             'task_state': feedback.attempt.get_state_display(),
-            'feedback': feedback.text})
+            'feedback': feedback.text,
+            'feedback_link': feedback_link})
 
         # Manually replace quotes and double-quotes as these get
         # escaped by the template and this makes the message look bad.

@@ -88,15 +88,13 @@ class CreateFeedbackView(LoginRequiredMixin, PrivacyPolicyRequiredMixin,
         # Send email to task owner
         task_name = feedback.attempt.task.name
         subject = 'Feedback on %s from One and Done' % task_name
-        task_link = 'http'
-        feedback_link = 'http'
+        link_prefix = 'http'
         if self.request.is_secure():
-            task_link += 's'
-            feedback_link += 's'
-        task_link += '://%s%s' % (
+            link_prefix += 's'
+        task_link = link_prefix+ '://%s%s' % (
             self.request.get_host(),
             feedback.attempt.task.get_absolute_url())
-        feedback_link += '://%s/admin/tasks/feedback/%s' % (
+        feedback_link = link_prefix + '://%s/admin/tasks/feedback/%s' % (
             self.request.get_host(), feedback.id)
         template = get_template('tasks/emails/feedback_email.txt')
 

@@ -91,7 +91,7 @@ class CreateFeedbackView(LoginRequiredMixin, PrivacyPolicyRequiredMixin,
         link_prefix = 'http'
         if self.request.is_secure():
             link_prefix += 's'
-        task_link = link_prefix+ '://%s%s' % (
+        task_link = link_prefix + '://%s%s' % (
             self.request.get_host(),
             feedback.attempt.task.get_absolute_url())
         feedback_link = link_prefix + '://%s/admin/tasks/feedback/%s' % (

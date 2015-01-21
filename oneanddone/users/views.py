@@ -158,10 +158,12 @@ class Verify(django_browserid.views.Verify):
     
     def login_success(self, *args, **kwargs):
         if (not UserProfile.objects.filter(user=self.request.user).exists()):
-            success_url = reverse_lazy('users.profile.create')
-        if (not UserProfile.objects.get(user=self.request.user).privacy_policy_accepted):
-            success_url = reverse_lazy('users.profile.update')
-        return super(Verify, self).login_success(*args, **kwargs,success_url)
+            self.success_url = reverse_lazy('users.profile.create')
+            return super(Verify, self).login_success(*args, **kwargs)
+        elif (not UserProfile.objects.get(user=self.request.user).privacy_policy_accepted):
+            self.success_url = reverse_lazy('users.profile.update')
+        self.success_url = reverse_lazy('base.home')
+        return super(Verify, self).login_success(*args, **kwargs)
 
 
 class UserDetailAPI(generics.RetrieveUpdateDestroyAPIView):

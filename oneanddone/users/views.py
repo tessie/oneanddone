@@ -156,14 +156,14 @@ class Verify(django_browserid.views.Verify):
         """).format(email='oneanddone@mozilla.com'), extra_tags='safe')
         return super(Verify, self).login_failure(*args, **kwargs)
     
-    def login_success(self, *args, **kwargs):
-        if (not UserProfile.objects.filter(user=self.request.user).exists()):
-            self.success_url = reverse_lazy('users.profile.create')
-            return super(Verify, self).login_success(*args, **kwargs)
-        elif (not UserProfile.objects.get(user=self.request.user).privacy_policy_accepted):
-            self.success_url = reverse_lazy('users.profile.update')
-        self.success_url = reverse_lazy('base.home')
-        return super(Verify, self).login_success(*args, **kwargs)
+    @property
+    def success_url(self):
+        if not UserProfile.objects.filter(user=self.user).exists():
+            return reverse_lazy('users.profile.create')
+        elif not UserProfile.objects.get(user=self.user).privacy_policy_accepted:
+            return reverse_lazy('users.profile.update')
+        else:
+            return super(Verify, self).success_url
 
 
 class UserDetailAPI(generics.RetrieveUpdateDestroyAPIView):

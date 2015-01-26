@@ -13,7 +13,7 @@ from rest_framework.reverse import reverse
 from rest_framework.authtoken.models import Token
 from nose.tools import eq_
 
-from oneanddone.users.tests import UserFactory
+from oneanddone.users.tests import UserFactory,UserProfileFactory
 
 
 class APITests(APITestCase):

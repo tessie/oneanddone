@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
@@ -18,6 +17,7 @@ from random import randint
 import re
 
 from oneanddone.tasks.models import TaskAttempt
+from oneanddone.tasks.mixins import APIRecordCreatorMixin, APIOnlyCreatorMayDeleteMixin
 from oneanddone.users.forms import UserProfileForm, SignUpForm
 from oneanddone.users.mixins import UserProfileRequiredMixin
 from oneanddone.users.models import UserProfile
@@ -49,7 +49,7 @@ class CreateProfileView(generic.CreateView):
             return super(CreateProfileView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        profile = form.save(commit=False)
+        profile = form.save(self.request.user, commit=False)
         profile.user = self.request.user
         profile.save()
         messages.success(self.request, _('Your profile has been created.'))
@@ -157,18 +157,18 @@ class Verify(django_browserid.views.Verify):
         return super(Verify, self).login_failure(*args, **kwargs)
 
 
-class UserDetailAPI(generics.UpdateAPIView, generics.DestroyAPIView):
+class UserDetailAPI(generics.UpdateAPIView, generics.DestroyAPIView, APIOnlyCreatorMayDeleteMixin):
     """
     API endpoint used to update and delete user data.
     """
-    lookup_field = 'email'
-    queryset = User.objects.all()
+    lookup_field = 'user__email'
+    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
 
 
-class UserCreateAPI(generics.CreateAPIView):
+class UserCreateAPI(generics.CreateAPIView, APIRecordCreatorMixin):
     """
     API endpoint used to create a new user.
     """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfile.objects.all()

@@ -25,9 +25,10 @@ class SignUpForm(forms.ModelForm):
         model = UserProfile
         fields = ('name', 'username', 'pp_checkbox', 'personal_url')
 
-    def save(self, *args, **kwargs):
+    def save(self, creator, *args, **kwargs):
         # We will only reach the save() method if the pp_checkbox was checked
         self.instance.privacy_policy_accepted = True
+        self.instance.creator = creator
         return super(SignUpForm, self).save(*args, **kwargs)
 
 

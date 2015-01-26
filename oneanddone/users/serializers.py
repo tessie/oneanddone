@@ -12,7 +12,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('name', 'username', 'privacy_policy_accepted')
+        fields = ( 'email', 'name', 'username', 'privacy_policy_accepted')
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -12,7 +12,7 @@ from django.db.models import Count, F
 from caching.base import CachingManager, CachingMixin
 from tower import ugettext_lazy as _lazy
 
-from oneanddone.base.models import CachedModel
+from oneanddone.base.models import CachedModel, CreatedByModel,CreatedModifiedModel
 from oneanddone.tasks.models import TaskAttempt
 
 
@@ -101,10 +101,10 @@ class OneAndDoneUserManager(CachingManager, UserManager):
 User.add_to_class('objects', OneAndDoneUserManager())
 
 # Add CachingMixin to User's base classes so that it can be cached.
-User.__bases__ = (CachingMixin,) + User.__bases__
+User.__bases__ = (CachingMixin, ) + User.__bases__
 
 
-class UserProfile(CachedModel, models.Model):
+class UserProfile(CachedModel, CreatedByModel, CreatedModifiedModel, models.Model):
     user = models.OneToOneField(User, related_name='profile')
 
     consent_to_email = models.BooleanField(default=True)

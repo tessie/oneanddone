@@ -527,7 +527,7 @@ class TaskMetricsSupportTests(TestCase):
         ql = self.task1.users_who_completed_this_task
         eq_(len(ql), 2)
         eq_(ql[0], self.user1)
-        eq_(ql[1], self.luser2)
+        eq_(ql[1], self.user2)
 
 
 class TaskAttemptTests(TestCase):

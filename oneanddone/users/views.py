@@ -161,7 +161,7 @@ class UserDetailAPI(generics.UpdateAPIView, generics.DestroyAPIView, APIOnlyCrea
     """
     API endpoint used to update and delete user data.
     """
-    lookup_field = 'user__email'
+    lookup_field = 'email'
     queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
 

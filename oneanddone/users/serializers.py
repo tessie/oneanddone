@@ -9,10 +9,11 @@ from oneanddone.users.models import UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ( 'email', 'name', 'username', 'privacy_policy_accepted')
+        fields = ( 'user', 'name', 'username', 'privacy_policy_accepted')
 
 
 class UserSerializer(serializers.ModelSerializer):

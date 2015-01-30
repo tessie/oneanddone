@@ -15,12 +15,12 @@ class Migration(SchemaMigration):
 
         # Adding field 'UserProfile.created'
         db.add_column('users_userprofile', 'created',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2015, 1, 26, 0, 0), blank=True),
+                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2015, 1, 29, 0, 0), blank=True),
                       keep_default=False)
 
         # Adding field 'UserProfile.modified'
         db.add_column('users_userprofile', 'modified',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now=True, default=datetime.datetime(2015, 1, 26, 0, 0), blank=True),
+                      self.gf('django.db.models.fields.DateTimeField')(auto_now=True, default=datetime.datetime(2015, 1, 29, 0, 0), blank=True),
                       keep_default=False)
 
 

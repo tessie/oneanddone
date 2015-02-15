@@ -158,6 +158,7 @@ class TaskDetailViewTests(TestCase):
         self.view.request.user.is_authenticated.return_value = False
         self.view.object.is_taken = False
         self.view.object.is_completed = False
+        self.view.object.one_time_per_user = False
 
         with patch('oneanddone.tasks.views.generic.DetailView.get_context_data') as get_context_data:
             get_context_data.return_value = {}
@@ -172,6 +173,20 @@ class TaskDetailViewTests(TestCase):
         self.view.request.user.is_authenticated.return_value = False
         self.view.object.is_taken = False
         self.view.object.is_completed = True
+
+        with patch('oneanddone.tasks.views.generic.DetailView.get_context_data') as get_context_data:
+            get_context_data.return_value = {}
+            ctx = self.view.get_context_data()
+            eq_(ctx['gs_button_label'], _('Completed'))
+            eq_(ctx['gs_button_disabled'], True)
+
+    def test_autheticated_user_completes_one_time_per_user_task(self):
+        """
+        if the user completes one_time_per_user_task.
+        """
+        self.view.request.user.is_authenticated.return_value = False
+        self.view.object.is_taken = False
+        self.view.object.one_time_per_user = True
 
         with patch('oneanddone.tasks.views.generic.DetailView.get_context_data') as get_context_data:
             get_context_data.return_value = {}

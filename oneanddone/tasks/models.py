@@ -337,6 +337,7 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
     object_id = models.PositiveIntegerField(null=True, blank=True)
     imported_item = generic.GenericForeignKey('content_type', 'object_id')
     next_task = models.ForeignKey('Task', null=True, blank=True, related_name='previous_task')
+    one_time_per_user = models.BooleanField(default=False)
     owner = models.ForeignKey(User, related_name='owner')
     project = models.ForeignKey(TaskProject, blank=True, null=True)
     team = models.ForeignKey(TaskTeam)

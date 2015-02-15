@@ -90,6 +90,13 @@
           {{ _('Invalid') }}
         </label>
       </div>
+      <div class="field">
+        {{ task_form['one_time_per_user'].errors }}
+        <label for="id_one_time_per_user">
+          {{ task_form['one_time_per_user'] }}
+          {{ _('User can complete this task only one time') }}
+        </label>
+      </div>
     </fieldset>
     {{ form_field(task_form['why_this_matters'], 'why-this-matters') }}
     {{ form_field(task_form['prerequisites']) }}

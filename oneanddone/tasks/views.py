@@ -372,6 +372,9 @@ class TaskDetailView(generic.DetailView):
         elif task.is_completed:
             gs_button_label = _('Completed')
             gs_button_disabled = True
+        elif task.one_time_per_user and self.request.user.has_completed_task(task):
+            gs_button_label = _('Completed')
+            gs_button_disabled = True
         else:
             gs_button_label = _('Get Started')
             gs_button_disabled = False

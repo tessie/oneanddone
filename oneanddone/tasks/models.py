@@ -336,6 +336,7 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     imported_item = generic.GenericForeignKey('content_type', 'object_id')
+    is_managed_task = models.BooleanField(default=False, verbose_name='is_managed_task')
     next_task = models.ForeignKey('Task', null=True, blank=True, related_name='previous_task')
     owner = models.ForeignKey(User, related_name='owner')
     project = models.ForeignKey(TaskProject, blank=True, null=True)
@@ -367,7 +368,7 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
     instructions = models.TextField()
     is_draft = models.BooleanField(verbose_name='draft')
     is_invalid = models.BooleanField(verbose_name='invalid')
-    name = models.CharField(max_length=255, verbose_name='title', unique=True)
+    name = models.CharField(max_length=255, verbose_name='title')
     prerequisites = models.TextField(blank=True)
     priority = models.IntegerField(
         choices=(

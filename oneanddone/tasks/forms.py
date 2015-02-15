@@ -57,6 +57,7 @@ class TaskForm(forms.ModelForm):
     next_task = forms.ModelChoiceField(
         queryset=Task.objects.filter(Task.is_available_filter()).order_by('name'),
         required=False)
+    is_managed_task = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         if kwargs['instance']:
@@ -100,7 +101,7 @@ class TaskForm(forms.ModelForm):
         fields = ('name', 'short_description', 'execution_time', 'difficulty',
                   'priority', 'repeatable', 'team', 'project', 'type', 'start_date',
                   'end_date', 'why_this_matters', 'prerequisites', 'instructions',
-                  'is_draft', 'is_invalid', 'owner', 'next_task')
+                  'is_draft', 'is_invalid', 'owner', 'next_task','is_managed_task')
         widgets = {
             'name': forms.TextInput(attrs={'size': 100, 'class': 'fill-width'}),
             'short_description': forms.TextInput(attrs={'size': 100, 'class': 'fill-width'}),

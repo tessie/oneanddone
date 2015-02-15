@@ -90,6 +90,13 @@
           {{ _('Invalid') }}
         </label>
       </div>
+       <div class="field">
+        {{ task_form['is_managed_task'].errors }}
+        <label for="id_is_managed_task">
+          {{ task_form['is_managed_task'] }}
+          {{ _('Managed Task') }}
+        </label>
+      </div>
     </fieldset>
     {{ form_field(task_form['why_this_matters'], 'why-this-matters') }}
     {{ form_field(task_form['prerequisites']) }}

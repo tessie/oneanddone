@@ -19,6 +19,9 @@
   <div class="row">
     <div>{{ task.short_description }}</div>
   </div>
+  <div class="row">
+    <div>{{ _('Votes') }}: {{ task.total_votes }}</div>
+    <div>
   {% if user.is_staff %}
     <div class="row"><div>{{ _('Owner') }}: {{ task.owner }}</div>
   {% endif %}

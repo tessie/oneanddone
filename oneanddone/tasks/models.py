@@ -37,6 +37,7 @@ class Feedback(CachedModel, CreatedModifiedModel):
     text = models.TextField()
     time_spent_in_minutes = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(99999)], blank=True, null=True)
+    rating = models.IntegerField(default = 0)
 
     def __unicode__(self):
         return u'Feedback: {user} for {task}'.format(
@@ -77,6 +78,12 @@ class TaskAttempt(CachedModel, CreatedModifiedModel):
         if self.has_feedback:
             return self.feedback.time_spent_in_minutes
         return None
+
+    @property
+    def task_rating(self):
+        if self.has_feedback:
+            return self.feedback.rating
+        return 0
 
     @property
     def feedback_display(self):
@@ -367,7 +374,7 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
     instructions = models.TextField()
     is_draft = models.BooleanField(verbose_name='draft')
     is_invalid = models.BooleanField(verbose_name='invalid')
-    name = models.CharField(max_length=255, verbose_name='title', unique=True)
+    name = models.CharField(max_length=255, verbose_name='title')
     prerequisites = models.TextField(blank=True)
     priority = models.IntegerField(
         choices=(
@@ -516,6 +523,14 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
             if user not in users:
                 users.append(user)
         return users
+
+    @property
+    def total_votes(self):
+       rating= 0
+       for attempt in self.all_attempts:
+           rating+= attempt.task_rating
+       print rating,"rating"
+       return rating
 
     def _yield_html(self, field):
         """

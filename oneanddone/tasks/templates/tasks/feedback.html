@@ -40,7 +40,19 @@
     <p>
       {{ form.time_spent_in_minutes.label }}
       {{ form.time_spent_in_minutes}}
-      {{ form.time_spent_in_minutes.errors }}
+      {{ form.time_spent_in_minutes.errors }}   
+    </p>
+    <p>
+      {{ form.rating.label }}
+      <br>
+      {% for choice in form.rating.field.choices %}
+        <input type="radio" name="rating" value="{{choice.0}}">
+        {% if form.rating.field.data== choice.0 %}
+          checked="checked"
+        {% endif %}
+        <label for="">{{choice.1}}</label>
+      {% endfor %}
+      {{ form.rating.errors }}
     </p>
     <div class="right">
       <a href="{{ url('tasks.whats_next', attempt.task.id) }}" class="no-feedback">{{ _('No, thanks.') }}</a>

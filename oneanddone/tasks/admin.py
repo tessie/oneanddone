@@ -14,7 +14,7 @@ class RecordCreatorMixin(object):
 
 
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('task', 'user', 'state', 'created', 'time_spent_in_minutes')
+    list_display = ('task', 'user', 'state', 'created', 'time_spent_in_minutes', 'rating')
     search_fields = ('text',)
     readonly_fields = ('task', 'user', 'state', 'text')
     exclude = ('attempt',)

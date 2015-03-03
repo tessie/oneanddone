@@ -44,15 +44,34 @@
     </p>
     <p>
       {{ form.rating.label }}
-      <br>
-      {% for choice in form.rating.field.choices %}
-        <input type="radio" name="rating" value="{{choice.0}}">
-        {% if form.rating.field.data== choice.0 %}
-          checked="checked"
-        {% endif %}
-        <label for="">{{choice.1}}</label>
-      {% endfor %}
-      {{ form.rating.errors }}
+      <div id="sentiment">
+        <div id="happy-button" class="sentiment-button" tabindex="0">
+          <svg class="face happy-face" viewBox="0 0 100 100">
+            <g>
+              <!-- 100 by 100 -->
+              <circle cx="50" cy="50" r="43" stroke-width="7" fill="none"></circle>
+              <circle cx="33" cy="37" r="7" stroke-width="0"></circle>
+              <circle cx="67" cy="37" r="7" stroke-width="0"></circle>
+              <path d="M22 58 C 35 85, 65 85, 78 58" stroke-width="6" fill="none"></path>
+            </g>
+          </svg>
+          <div class="face-description">
+            <input type="radio" name="rating" value="1">                
+          </div>
+        </div>
+        <div id="sad-button" class="sentiment-button" tabindex="0">
+          <svg class="face sad-face" viewBox="0 0 100 100">
+            <g>
+              <circle cx="50" cy="50" r="43" stroke-width="7" fill="none"></circle>
+              <circle cx="33" cy="37" r="7" stroke-width="0"></circle>
+              <circle cx="67" cy="37" r="7" stroke-width="0"></circle>
+              <path d="M24 72 C 35 55, 65 55, 76 72" stroke-width="6" fill="none"></path>
+            </g>
+          </svg>
+          <div class="face-description">
+            <input type="radio" name="rating" value="-1">
+          </div>
+        </div>  
     </p>
     <div class="right">
       <a href="{{ url('tasks.whats_next', attempt.task.id) }}" class="no-feedback">{{ _('No, thanks.') }}</a>

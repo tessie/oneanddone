@@ -10,7 +10,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Avg, Count, F, Q
+from django.db.models import Avg, Count, F, Q, Sum
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -78,12 +78,6 @@ class TaskAttempt(CachedModel, CreatedModifiedModel):
         if self.has_feedback:
             return self.feedback.time_spent_in_minutes
         return None
-
-    @property
-    def task_rating(self):
-        if self.has_feedback:
-            return self.feedback.rating
-        return 0
 
     @property
     def feedback_display(self):
@@ -374,7 +368,7 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
     instructions = models.TextField()
     is_draft = models.BooleanField(verbose_name='draft')
     is_invalid = models.BooleanField(verbose_name='invalid')
-    name = models.CharField(max_length=255, verbose_name='title')
+    name = models.CharField(max_length=255, verbose_name='title', unique=True)
     prerequisites = models.TextField(blank=True)
     priority = models.IntegerField(
         choices=(
@@ -525,12 +519,8 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
         return users
 
     @property
-    def total_votes(self):
-       rating= 0
-       for attempt in self.all_attempts:
-           rating+= attempt.task_rating
-       print rating,"rating"
-       return rating
+    def total_rating(self):
+       return TaskAttempt.objects.filter(task=self.id).aggregate(Sum('feedback__rating'))['feedback__rating__sum']
 
     def _yield_html(self, field):
         """

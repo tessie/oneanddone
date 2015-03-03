@@ -4,7 +4,6 @@
 from django import forms
 
 from django_ace import AceWidget
-from django.utils.safestring import mark_safe
 from requests.exceptions import RequestException
 from tower import ugettext as _
 from urlparse import urlparse, parse_qs
@@ -27,12 +26,12 @@ class BaseTaskInvalidCriteriaFormSet(forms.formsets.BaseFormSet):
 
 
 class FeedbackForm(forms.ModelForm):
-    CHOICES = ((1, mark_safe(_('<img src="/static/icons/happy.png" alt="approve" width= "87" height = "87" title="approve">'))),
-              (-1, mark_safe(_('<img src="/static/icons/sad.png" width="87" height = "87" alt="disapprove" title="disapprove">'))))
+    RATING = ((1,1),
+              (-1, -1))
 
     time_spent_in_minutes = forms.IntegerField(
         label=_(' How many minutes did you spend on the task?'))
-    rating = forms.ChoiceField(label=_('How do you rate this task?'), choices=CHOICES, widget=forms.RadioSelect())
+    rating = forms.ChoiceField(label=_('How do you rate this task?'), choices=RATING, widget=forms.RadioSelect())
 
     class Meta:
         model = Feedback

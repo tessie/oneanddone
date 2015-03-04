@@ -10,7 +10,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Avg, Count, F, Q, Sum
+from django.db.models import Avg, Count, F, Q
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -517,10 +517,6 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
             if user not in users:
                 users.append(user)
         return users
-
-    @property
-    def total_rating(self):
-       return TaskAttempt.objects.filter(task=self.id).aggregate(Sum('feedback__rating'))['feedback__rating__sum']
 
     def _yield_html(self, field):
         """

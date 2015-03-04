@@ -328,6 +328,16 @@ class TaskTests(TestCase):
         user = UserFactory.create()
         eq_(self.task_not_repeatable_no_attempts.is_available_to_user(user), True)
 
+    def test_is_available_to_user_not_completed_one_time_per_user_tasks(self):
+        """"
+        If the task is one_time_per_user_tasks and and the user
+        has not  completed it, then the tasks must be available.
+        """
+        user = UserFactory.create()
+        task = TaskFactory.create(one_time_per_user=True)
+        TaskAttemptFactory.create(user=user, state=TaskAttempt.STARTED, task=task)
+        eq_(task.is_available_to_user(user), True)
+
     def test_is_available_to_user_user_attempt(self):
         """
         If there is an attempt by the current user,
@@ -340,7 +350,7 @@ class TaskTests(TestCase):
 
     def test_is_available_to_user_other_user_abandoned_attempt(self):
         """
-        If there is a non-abandoned attempt by a different user,
+        If there is a abandoned attempt by a different user,
         the task should not be available.
         """
         user = UserFactory.create()
@@ -348,6 +358,16 @@ class TaskTests(TestCase):
         task = TaskFactory.create(repeatable=False)
         TaskAttemptFactory.create(user=other_user, state=TaskAttempt.ABANDONED, task=task)
         eq_(task.is_available_to_user(user), True)
+
+    def test_isnt_available_to_user_completed_one_time_per_user_tasks(self):
+        """
+        If the task is one_time_per_user_tasks and and the user
+        has completed it, then the tasks must not be available
+        """
+        user = UserFactory.create()
+        task = TaskFactory.create(repeatable=False, one_time_per_user=True)
+        TaskAttemptFactory.create(user= user, state=TaskAttempt.FINISHED, task=task)
+        eq_(task.is_available_to_user(user), False)
 
     def test_isnt_available_to_user_other_user_non_abandoned_attempt(self):
         """

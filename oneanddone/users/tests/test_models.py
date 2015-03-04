@@ -91,6 +91,29 @@ class UserTests(TestCase):
         task = TaskFactory.create()
         ok_(not user.has_completed_task(task))
 
+    def test_has_completed_task_false_task_abandoned(self):
+        """
+        has_completed_task should return false if the user has abandoned the task.
+        """
+        user = UserFactory.create()
+        task = TaskFactory.create()
+        TaskAttemptFactory.create(user=user, task=task, state=TaskAttempt.ABANDONED)
+        ok_(not user.has_completed_task(task))
+
+    def test_has_completed_task_false_task_started(self):
+        """
+        has_completed_task should return false if the user has just started the task.
+        """
+        user = UserFactory.create()
+        task = TaskFactory.create()
+        TaskAttemptFactory.create(user=user, task=task, state=TaskAttempt.STARTED)
+<<<<<<< HEAD
+        ok_(not user.has_completed_task(task))  
+
+=======
+        ok_(not user.has_completed_task(task))
+   
+>>>>>>> 205be31... Bug 1139392 - User.has_completed_task is broken
     def test_profile_email_with_consent(self):
         """
         The email attribute should return the user's email
@@ -119,7 +142,7 @@ class UserTests(TestCase):
         user = UserProfileFactory.create(username=None)
         profile_url = '/profile/%s/' % user.user.id
         eq_(user.profile_url, profile_url)
-     
+
     def test_unicode(self):
         """
         The string representation of a user should include their

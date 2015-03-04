@@ -546,7 +546,8 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
     def is_available_to_user(self, user):
         repeatable_filter = Q(~Q(user=user) & ~Q(state=TaskAttempt.ABANDONED))
         return self.is_available and (
-            self.repeatable or not self.taskattempt_set.filter(repeatable_filter).exists())
+            self.repeatable or not self.taskattempt_set.filter(repeatable_filter).exists()) and (not (
+              self.one_time_per_user and user.has_completed_task(self.id)))
 
     def replace_keywords(self, keywords, creator):
         self.keyword_set.all().delete()

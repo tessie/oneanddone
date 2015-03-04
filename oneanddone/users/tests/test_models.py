@@ -107,13 +107,8 @@ class UserTests(TestCase):
         user = UserFactory.create()
         task = TaskFactory.create()
         TaskAttemptFactory.create(user=user, task=task, state=TaskAttempt.STARTED)
-<<<<<<< HEAD
         ok_(not user.has_completed_task(task))  
 
-=======
-        ok_(not user.has_completed_task(task))
-   
->>>>>>> 205be31... Bug 1139392 - User.has_completed_task is broken
     def test_profile_email_with_consent(self):
         """
         The email attribute should return the user's email
